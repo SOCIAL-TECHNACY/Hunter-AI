@@ -62,8 +62,8 @@ src/
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/technacydevelopers/HUNTER-AI.git
-cd HUNTER-AI
+git clone https://github.com/SOCIAL-TECHNACY/Hunter-AI.git
+cd Hunter-AI
 npm install
 ```
 
@@ -104,7 +104,7 @@ npm run dev
 
 ## Deploying to Vercel
 
-1. Push to the `technacydevelopers/HUNTER-AI` repository on GitHub
+1. Push to the `SOCIAL-TECHNACY/Hunter-AI` repository on GitHub
 2. Import the project on [vercel.com](https://vercel.com)
 3. Add all environment variables from `.env.example` in the Vercel dashboard
 4. Deploy — Vercel auto-detects Next.js and handles everything
