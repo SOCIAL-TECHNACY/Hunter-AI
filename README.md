@@ -1,24 +1,33 @@
-# Hunter AI — Waitlist Application (Phase 0)
+# Hunter AI
 
-> Built by **[Social Technancy](https://socialtechnancy.com)**
+**Find buyers before they find you.**
 
-AI-powered customer discovery for African businesses. Hunter AI scans social media 24/7 to find people actively looking for what your business sells and delivers them directly to your WhatsApp.
+Hunter AI is an AI-powered customer discovery tool built for African businesses. It monitors social media platforms 24/7 — Facebook, Instagram, TikTok, WhatsApp groups, and Twitter — scanning for people who are actively looking for what you sell, then delivers those leads directly to your WhatsApp.
+
+Built by [Social Technancy](https://socialtechnancy.com).
+
+---
+
+## What This Repository Contains
+
+This is the **Phase 0 Waitlist** application. It is not the full SaaS product — it is the pre-launch page designed to collect signups, build anticipation, and manage a queue before the main platform goes live.
+
+The architecture is production-ready and built to grow directly into the full SaaS product without any rebuilding.
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 15 (App Router) |
-| Language | TypeScript 5 |
-| Styling | TailwindCSS v3 |
+|---|---|
+| Framework | Next.js 15 App Router |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
 | Animations | Framer Motion |
 | Forms | React Hook Form + Zod |
 | Database | Supabase (PostgreSQL) |
 | Email | Resend |
-| Icons | Lucide React |
-| Deployment | Vercel (recommended) |
+| Deployment | Vercel |
 
 ---
 
@@ -26,171 +35,139 @@ AI-powered customer discovery for African businesses. Hunter AI scans social med
 
 ```
 src/
-├── actions/           # Next.js Server Actions (waitlist.ts, admin.ts)
-├── app/               # App Router pages (/, /admin, /r/[code], /(auth)/login)
+├── app/
+│   ├── page.tsx              # Landing page
+│   ├── admin/page.tsx        # Admin dashboard
+│   ├── r/[code]/page.tsx     # Referral redirect
+│   └── (auth)/login/page.tsx # Auth placeholder (Phase 1)
 ├── components/
-│   ├── landing/       # Landing page sections
-│   ├── ui/            # Reusable primitives (Button, Input, Select, Badge, Card, Accordion)
-│   └── waitlist/      # Waitlist form + success view
+│   ├── landing/              # All landing page sections
+│   ├── waitlist/             # Waitlist form + success screen
+│   └── ui/                   # Reusable UI primitives
+├── actions/                  # Next.js server actions
+├── repositories/             # Data access layer (Supabase)
+├── services/                 # Business logic
 ├── lib/
-│   ├── supabase/      # client.ts, server.ts, admin.ts
-│   ├── email/         # templates.ts (6 email templates)
-│   ├── utils/         # cn.ts, code-generator.ts, referral-calculator.ts, formatters.ts
-│   └── constants.ts   # App-wide constants
-├── middleware.ts       # Auth-ready route protection (Phase 1 placeholder)
-├── repositories/
-│   └── waitlist.repository.ts  # Supabase data access layer
-├── services/
-│   ├── waitlist.service.ts     # Business logic
-│   └── email.service.ts        # Resend email dispatch
-└── types/
-    ├── auth.ts         # Auth interfaces (Phase 1)
-    ├── database.ts     # Supabase schema types
-    └── waitlist.ts     # Waitlist domain types
+│   ├── email/                # Resend email templates
+│   ├── supabase/             # Client, server, admin setup
+│   ├── utils/                # Helpers and formatters
+│   └── validations/          # Zod schemas
+└── types/                    # TypeScript type definitions
 ```
 
 ---
 
 ## Getting Started
 
-### 1. Install dependencies
+### 1. Clone and install
 
 ```bash
+git clone https://github.com/technacydevelopers/HUNTER-AI.git
+cd HUNTER-AI
 npm install
 ```
 
-### 2. Configure environment variables
+### 2. Set up environment variables
 
 ```bash
 cp .env.example .env.local
 ```
 
-Fill in your values:
+Edit `.env.local` with your values:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
-ADMIN_EMAIL=admin@socialtechnancy.com
-NEXT_PUBLIC_APP_URL=https://socialtechnancy.com
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxx
+ADMIN_EMAIL=admin@yourdomain.com
+NEXT_PUBLIC_APP_URL=https://yourdomain.com
 ```
 
-### 3. Set up Supabase database
+### 3. Set up the database
 
-Run the migration in your Supabase SQL editor:
+Open your Supabase project → **SQL Editor** → paste and run the contents of:
 
-```bash
-# Copy and execute in Supabase > SQL Editor:
+```
 supabase/migrations/001_initial_schema.sql
 ```
 
-### 4. Run development server
+This creates all the tables, indexes, Row Level Security policies, and trigger functions.
+
+### 4. Run the development server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+---
+
+## Deploying to Vercel
+
+1. Push this repository to GitHub
+2. Import the project on [vercel.com](https://vercel.com)
+3. Add all environment variables from `.env.example` in the Vercel dashboard
+4. Deploy — Vercel auto-detects Next.js and handles everything
 
 ---
 
 ## Database Schema
 
-### `waitlist` table (Phase 0 + SaaS Forward Compatibility)
+The `waitlist` table is designed to carry forward into the full SaaS product:
 
-| Column | Type | Description |
-|--------|------|-------------|
+| Column | Type | Purpose |
+|---|---|---|
 | `id` | UUID | Primary key |
 | `business_name` | TEXT | Business name |
-| `owner_name` | TEXT | Owner full name |
-| `email` | TEXT | Unique email |
-| `whatsapp` | TEXT | Unique WhatsApp number |
+| `owner_name` | TEXT | Owner's full name |
+| `email` | TEXT | Unique email address |
+| `whatsapp` | TEXT | WhatsApp number for lead delivery |
 | `business_niche` | TEXT | Business category |
-| `business_description` | TEXT? | Optional business description |
-| `ideal_customer` | TEXT? | Optional ICP description |
+| `business_description` | TEXT | Optional business description |
+| `ideal_customer` | TEXT | Ideal customer profile |
 | `city` | TEXT | City of operation |
-| `location` | TEXT | Specific area / neighborhood |
-| `country` | TEXT | African country |
-| `platforms` | JSONB | Social platforms targeting |
+| `location` | TEXT | Specific area or neighbourhood |
+| `country` | TEXT | Country |
+| `platforms` | JSONB | Target social platforms |
 | `languages` | JSONB | Customer languages |
-| `source` | TEXT | Acquisition source |
-| `referral_code` | TEXT | Unique referral code |
-| `referred_by` | TEXT? | Referrer's code |
-| `referrals_count` | INT | Total referrals made |
-| `points` | INT | Referral points (base 10 + 100/referral) |
-| `position` | INT | Queue position |
-| `status` | TEXT | pending/approved/active/onboarded |
-| `created_at` | TIMESTAMPTZ | Registration time |
-| `updated_at` | TIMESTAMPTZ | Last updated |
+| `source` | TEXT | How they found the waitlist |
+| `referral_code` | TEXT | Unique referral identifier |
+| `referred_by` | TEXT | Referrer's code |
+| `referrals_count` | INT | Total successful referrals |
+| `points` | INT | Queue priority score |
+| `position` | INT | Position in the waitlist |
+| `status` | TEXT | `pending`, `approved`, `active`, `onboarded` |
 
-### Future SaaS Tables (Forward-Compatible)
+Forward-compatible tables also exist for the full product: `profiles`, `tenants`, `subscriptions`, `hunter_jobs`, `leads`.
 
-- `profiles` — Linked to Supabase Auth users
-- `tenants` — Multi-tenant support
-- `subscriptions` — Plan tier management
-- `hunter_jobs` — Social media crawling jobs
-- `leads` — Discovered buyer records
+---
+
+## Referral System
+
+Every signup earns **10 points**. Each successful referral earns **100 points** and moves the referrer up the queue. Referring 3 or more businesses unlocks early access regardless of original position.
+
+**Rank tiers:** Rookie → Starter → Hustler → Boss → Legend
 
 ---
 
 ## Email Templates
 
-Six reusable templates in `src/lib/email/templates.ts`:
+Six templates are ready in `src/lib/email/templates.ts`:
 
-| Template | When sent |
-|----------|-----------|
-| `welcomeEmailTemplate` | On registration ✅ Active |
-| `adminNotificationTemplate` | On every signup ✅ Active |
-| `weeklyUpdateTemplate` | Weekly job (future) |
-| `launchReminderTemplate` | Pre-launch (future) |
-| `referralMilestoneTemplate` | On referral milestone (future) |
-| `queuePositionUpdateTemplate` | On queue movement (future) |
+| Template | Trigger |
+|---|---|
+| Welcome | On every new signup |
+| Admin Notification | On every new signup |
+| Weekly Update | Scheduled (Phase 1) |
+| Launch Reminder | Pre-launch (Phase 1) |
+| Referral Milestone | On milestone reached (Phase 1) |
+| Queue Position Update | On queue movement (Phase 1) |
 
 ---
 
 ## Admin Dashboard
 
-Visit `/admin` to access the admin panel:
-- Live waitlist entries with filtering
-- Stats (total signups, referrals, avg points)
-- CSV export
-- Auth-ready: protected by middleware when Supabase Auth is enabled in Phase 1
-
----
-
-## Referral Points System
-
-| Action | Points |
-|--------|--------|
-| Registration | +10 |
-| Per successful referral | +100 |
-| Full profile completion | +50 (future) |
-
-Rank tiers: Rookie → Starter → Hustler → Boss → Legend
-
----
-
-## Git Setup
-
-```bash
-git init
-git remote add origin https://github.com/TechnacyAi/Customers-Hunter-Ai.git
-git add .
-git commit -m "feat: Hunter AI Waitlist Phase 0 — production-ready"
-git branch -M main
-git push -u origin main
-```
-
----
-
-## Deployment
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
-
-1. Connect your GitHub repository in Vercel
-2. Add all environment variables from `.env.example`
-3. Deploy — Vercel auto-detects Next.js
+Available at `/admin`. Shows live waitlist entries, stats, filtering, and CSV export. Authentication middleware is stubbed and ready for Supabase Auth in Phase 1.
 
 ---
 
