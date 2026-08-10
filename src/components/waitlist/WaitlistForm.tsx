@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Target, Sparkles, ShieldCheck, ArrowRight, Zap, Users } from "lucide-react";
+import { ArrowRight, ShieldCheck, Zap, Users } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
@@ -57,61 +57,35 @@ export function WaitlistForm({ defaultReferralCode, onSuccess }: WaitlistFormPro
   };
 
   return (
-    <section id="waitlist-form" className="py-24 bg-[#0D0820] relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-brand-purple/30 via-brand-accent/20 to-transparent blur-[140px] pointer-events-none" />
-
+    <section id="waitlist-form" className="py-24 bg-[#0D0820] relative">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Section Heading */}
+        {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-purple-400/20 text-purple-200 text-xs font-semibold mb-4 backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-brand-accent" />
-            Limited Founding Member Slots
-          </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
-            Secure Your Priority Spot
+            Secure Your Early Access
           </h2>
-          <p className="text-purple-200/70 text-sm sm:text-base max-w-lg mx-auto">
-            Join the waitlist to get qualified buyer leads delivered to your WhatsApp from Day 1.
+          <p className="text-purple-200/80 text-sm sm:text-base max-w-md mx-auto">
+            Get 7 full days of access at launch. Free to join and takes less than 60 seconds.
           </p>
         </div>
 
         {/* Elevated Pristine White Form Card */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
           className="bg-white rounded-3xl p-6 sm:p-10 shadow-2xl shadow-purple-950/40 border border-purple-100"
         >
-          {/* Card Mini Header */}
-          <div className="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-brand-purple/10 text-brand-purple flex items-center justify-center">
-                <Target className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-extrabold text-base text-[#1A1033]">
-                  Registration Form
-                </h3>
-                <p className="text-xs text-slate-500 font-medium">Takes less than 60 seconds</p>
-              </div>
-            </div>
-
-            <span className="text-xs font-bold text-brand-emerald bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-              Free to Join
-            </span>
-          </div>
-
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4 sm:space-y-5">
-            {/* Global/Root Error Alert */}
+            {/* Global Error */}
             {errors.root && (
               <div className="px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-medium">
                 {errors.root.message}
               </div>
             )}
 
-            {/* Business Info (2 columns on desktop) */}
+            {/* Business Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 id="businessName"
@@ -147,17 +121,17 @@ export function WaitlistForm({ defaultReferralCode, onSuccess }: WaitlistFormPro
                 type="tel"
                 label="WhatsApp Number *"
                 placeholder="+234 801 234 5678"
-                hint="Leads are sent directly to this number"
+                hint="Leads are dispatched to this number"
                 variant="light"
                 error={errors.whatsapp?.message}
                 {...register("whatsapp")}
               />
             </div>
 
-            {/* Business Niche Select */}
+            {/* Business Niche */}
             <Select
               id="businessNiche"
-              label="Business Niche *"
+              label="Business Category *"
               placeholder="Select your business category..."
               options={NICHE_OPTIONS}
               variant="light"
@@ -165,7 +139,7 @@ export function WaitlistForm({ defaultReferralCode, onSuccess }: WaitlistFormPro
               {...register("businessNiche")}
             />
 
-            {/* Location & Country */}
+            {/* Country and City */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Select
                 id="country"
@@ -185,12 +159,12 @@ export function WaitlistForm({ defaultReferralCode, onSuccess }: WaitlistFormPro
               />
             </div>
 
-            {/* Specific Neighborhood */}
+            {/* Neighborhood / Target Location */}
             <Input
               id="location"
-              label="Specific Area / Neighborhood *"
+              label="Target Area / Neighborhood *"
               placeholder="e.g. Lekki Phase 1, Surulere, Westlands..."
-              hint="Where most of your target customers or store are located"
+              hint="Where most of your customers are located"
               variant="light"
               error={errors.location?.message}
               {...register("location")}
@@ -201,7 +175,7 @@ export function WaitlistForm({ defaultReferralCode, onSuccess }: WaitlistFormPro
               id="referralCode"
               label="Referral Code (optional)"
               placeholder="e.g. ADEY-SALEMAX123"
-              hint="Enter your friend's referral code to give them +100 points"
+              hint="Enter your referrer's code to give them +100 points"
               variant="light"
               error={errors.referralCode?.message}
               {...register("referralCode")}
@@ -212,27 +186,27 @@ export function WaitlistForm({ defaultReferralCode, onSuccess }: WaitlistFormPro
               <Button
                 type="submit"
                 size="lg"
-                className="w-full text-base font-bold py-4 shadow-lg shadow-brand-purple/30 group"
+                className="w-full text-base font-bold py-4 shadow-lg shadow-brand-purple/25 group"
                 isLoading={isSubmitting}
               >
-                <span>Claim Your Spot in the Queue</span>
+                <span>Claim Your Spot on the Waitlist</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
 
-            {/* Trust Footer inside card */}
-            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500 pt-2 border-t border-slate-100">
+            {/* Small Privacy & Trust Footnote */}
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500 pt-3 border-t border-slate-100">
               <span className="flex items-center gap-1 font-medium">
-                <ShieldCheck className="w-4 h-4 text-brand-emerald" />
-                Zero Spam Guarantee
+                <ShieldCheck className="w-3.5 h-3.5 text-brand-emerald" />
+                No credit card required
               </span>
               <span className="flex items-center gap-1 font-medium">
-                <Zap className="w-4 h-4 text-amber-500" />
-                Instant Position Assignment
+                <Zap className="w-3.5 h-3.5 text-brand-purple" />
+                7 days access at launch
               </span>
               <span className="flex items-center gap-1 font-medium">
-                <Users className="w-4 h-4 text-brand-purple" />
-                2,400+ Joined
+                <Users className="w-3.5 h-3.5 text-slate-500" />
+                Instant queue placement
               </span>
             </div>
           </form>

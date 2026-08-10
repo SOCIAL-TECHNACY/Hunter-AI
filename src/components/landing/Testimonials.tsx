@@ -1,114 +1,135 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Star, BadgeCheck } from "lucide-react";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
-const TESTIMONIALS = [
+interface Testimonial {
+  name: string;
+  role: string;
+  business: string;
+  location: string;
+  quote: string;
+  metric: string;
+}
+
+const TESTIMONIALS: Testimonial[] = [
   {
     name: "Chioma Adeyemi",
-    role: "Founder, House of Silk & Lace",
+    role: "Founder & Creative Director",
+    business: "Adeyemi Silk & Lace",
     location: "Lagos, Nigeria",
-    avatar: "👩🏾‍💼",
     quote:
-      "I used to spend 3 hours every night scrolling Instagram and Facebook looking for customers. With Hunter AI, verified leads come directly to my WhatsApp every morning. My revenue doubled in two weeks.",
+      "Before Hunter, I spent three hours every evening searching Facebook groups manually. With Hunter running in the background, verified customer inquiries are delivered to my WhatsApp while I prepare orders. Our weekly sales doubled within fourteen days.",
+    metric: "2x Sales Increase in 14 Days",
   },
   {
     name: "Kwame Asante",
-    role: "CEO, Asante Electronics",
+    role: "Managing Director",
+    business: "Asante Electronics",
     location: "Accra, Ghana",
-    avatar: "👨🏿‍💻",
     quote:
-      "Within 24 hours of beta access, I received 8 leads looking for specific MacBook models in Accra. Closed 3 sales the very same week without spending a single cedi on paid ads.",
+      "Within our first 48 hours of testing, we received 8 high-intent leads specifically looking for MacBook and iPhone models in Accra. We closed three sales immediately without spending any budget on paid sponsored ads.",
+    metric: "3 Sales Closed in 48 Hours",
   },
   {
     name: "Fatima Al-Hassan",
-    role: "Head Chef, Spice Palace Catering",
+    role: "Head Chef & Owner",
+    business: "Spice Palace Catering",
     location: "Abuja, Nigeria",
-    avatar: "🧕🏾",
     quote:
-      "Hunter AI understands Nigerian Pidgin and Hausa flawlessly! It caught a corporate event planner asking for 200 boxed lunches that I would have completely missed on Twitter.",
+      "Hunter's ability to understand Nigerian Pidgin and Hausa expressions makes all the difference. It caught an urgent corporate event inquiry for forty boxed lunches on Twitter that standard tools completely missed.",
+    metric: "40-Person Corporate Contract",
   },
   {
     name: "James Ochieng",
-    role: "Director, Rift Valley Solar",
+    role: "Director",
+    business: "Rift Valley Solar Systems",
     location: "Nairobi, Kenya",
-    avatar: "🧑🏿‍🔧",
     quote:
-      "In Nairobi, speed is everything. Hunter AI alerts us within 60 seconds of a customer asking for solar battery backups. We are always the first company to reply.",
-  },
-  {
-    name: "Amara Diallo",
-    role: "Owner, Dakar Glamour Studio",
-    location: "Dakar, Senegal",
-    avatar: "💆🏾‍♀️",
-    quote:
-      "We no longer post and pray. Hunter AI hunts for active buyer demand across social networks and delivers them straight to our WhatsApp chat. It is indispensable.",
-  },
-  {
-    name: "Emeka Okafor",
-    role: "Managing Partner, Swift Logistics",
-    location: "Port Harcourt, Nigeria",
-    avatar: "🚚",
-    quote:
-      "Anyone asking for same-day haulage in PH, Hunter AI detects it. We have closed over 35 new commercial contracts this month alone.",
+      "In commercial equipment, the first business to reply wins the deal. Hunter alerts us within sixty seconds of a customer posting about solar inverter installation anywhere in Nairobi.",
+    metric: "< 60s Average Response Time",
   },
 ];
 
 export function Testimonials() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const prev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1));
+  };
+
+  const next = () => {
+    setCurrentIndex((prev) => (prev === TESTIMONIALS.length - 1 ? 0 : prev + 1));
+  };
+
+  const current = TESTIMONIALS[currentIndex];
+
   return (
-    <section className="py-24 bg-white text-slate-900 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-brand-purple text-xs font-bold tracking-widest uppercase mb-3">
-            Real Impact & Social Proof
+    <section className="py-24 bg-white text-slate-900 relative">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        {/* Section Header */}
+        <div className="text-center max-w-xl mx-auto mb-14">
+          <p className="text-brand-purple text-xs font-bold uppercase tracking-wider mb-2">
+            Early Feedback
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1A1033] tracking-tight mb-4">
-            Loved by African <span className="text-gradient-purple font-serif italic">Entrepreneurs</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1A1033] tracking-tight">
+            Tested by Real African Merchants
           </h2>
-          <p className="text-slate-600 text-base sm:text-lg">
-            Hear from African merchants and service providers testing Hunter AI across 6 commercial hubs.
-          </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TESTIMONIALS.map(({ name, role, location, avatar, quote }, i) => (
-            <motion.div
-              key={name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.45 }}
-              className="bg-[#FAF9FF] rounded-3xl p-7 border border-purple-100/90 shadow-md shadow-purple-950/5 flex flex-col justify-between hover:border-brand-purple/40 hover:shadow-xl transition-all duration-300"
-            >
-              <div>
-                {/* 5-Star Rating */}
-                <div className="flex items-center gap-1 mb-4">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
+        {/* Large Featured Editorial Testimonial Card */}
+        <div className="bg-[#FAF9FF] border border-purple-100 rounded-3xl p-8 sm:p-12 shadow-md shadow-purple-950/5 relative">
+          <Quote className="w-10 h-10 text-brand-purple/20 mb-6" />
 
-                <p className="text-slate-700 text-sm leading-relaxed mb-6 font-medium">
-                  &ldquo;{quote}&rdquo;
-                </p>
-              </div>
+          <p className="text-lg sm:text-xl md:text-2xl font-medium text-[#1A1033] leading-relaxed mb-8">
+            &ldquo;{current.quote}&rdquo;
+          </p>
 
-              {/* Author */}
-              <div className="flex items-center gap-3 pt-4 border-t border-purple-100">
-                <div className="w-11 h-11 rounded-2xl bg-white border border-purple-200 flex items-center justify-center text-2xl shadow-sm">
-                  {avatar}
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <p className="font-bold text-sm text-[#1A1033] truncate">{name}</p>
-                    <BadgeCheck className="w-4 h-4 text-brand-purple flex-shrink-0" />
-                  </div>
-                  <p className="text-xs text-slate-500 truncate">{role} · {location}</p>
-                </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-6 border-t border-purple-100">
+            <div>
+              <p className="font-extrabold text-base text-[#1A1033]">{current.name}</p>
+              <p className="text-xs text-slate-600 font-medium">
+                {current.role}, <strong className="text-slate-900">{current.business}</strong>
+              </p>
+              <p className="text-xs text-slate-500 mt-0.5">{current.location}</p>
+            </div>
+
+            <div className="flex items-center justify-between sm:justify-end gap-4">
+              <span className="text-xs font-semibold text-brand-purple bg-purple-100 px-3 py-1.5 rounded-full">
+                {current.metric}
+              </span>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={prev}
+                  className="w-9 h-9 rounded-full bg-white border border-slate-200 hover:border-brand-purple text-slate-700 flex items-center justify-center transition-colors"
+                  aria-label="Previous testimonial"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={next}
+                  className="w-9 h-9 rounded-full bg-white border border-slate-200 hover:border-brand-purple text-slate-700 flex items-center justify-center transition-colors"
+                  aria-label="Next testimonial"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
-            </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Selector Tabs */}
+        <div className="flex items-center justify-center gap-2 mt-6">
+          {TESTIMONIALS.map((item, idx) => (
+            <button
+              key={item.business}
+              onClick={() => setCurrentIndex(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                idx === currentIndex ? "w-8 bg-brand-purple" : "w-2 bg-slate-200 hover:bg-slate-300"
+              }`}
+              aria-label={`Select testimonial from ${item.name}`}
+            />
           ))}
         </div>
       </div>

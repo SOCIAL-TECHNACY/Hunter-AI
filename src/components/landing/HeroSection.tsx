@@ -1,32 +1,50 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Radar, Sparkles, ShieldCheck, Zap, MessageSquare } from "lucide-react";
+import { ArrowRight, MessageSquare, ShieldCheck, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { APP_NAME } from "@/lib/constants";
 
-const STATS = [
-  { value: "2,400+", label: "Businesses in queue" },
-  { value: "87%", label: "Lead-to-sale rate" },
-  { value: "< 60s", label: "Delivery to WhatsApp" },
-];
+interface DiscoveryNode {
+  category: string;
+  location: string;
+  query: string;
+  score: string;
+  position: string;
+  delay: number;
+}
 
-const SIGNALS = [
+const DISCOVERY_NODES: DiscoveryNode[] = [
   {
-    platform: "Instagram",
-    text: "Who sells luxury wig glueless in VI?",
+    category: "Apparel & Fabrics",
     location: "Lagos, NG",
-    delay: 0.8,
-    position: "top-12 -left-6 sm:-left-12 lg:-left-20",
-    icon: "📸",
+    query: "Looking for wholesale Aso-Oke supplier",
+    score: "96% Intent",
+    position: "top-4 left-0 sm:-left-6 lg:-left-16",
+    delay: 0.2,
   },
   {
-    platform: "TikTok",
-    text: "Need affordable solar inverter package urgently",
+    category: "Consumer Tech",
+    location: "Accra, GH",
+    query: "Need brand new MacBook Pro in Accra",
+    score: "93% Intent",
+    position: "top-8 right-0 sm:-right-6 lg:-right-16",
+    delay: 0.4,
+  },
+  {
+    category: "Catering & Events",
+    location: "Abuja, NG",
+    query: "Urgent catering for 50 people Saturday",
+    score: "95% Intent",
+    position: "bottom-8 left-0 sm:-left-4 lg:-left-12",
+    delay: 0.6,
+  },
+  {
+    category: "Solar & Clean Energy",
     location: "Nairobi, KE",
-    delay: 1.2,
-    position: "bottom-16 -right-6 sm:-right-12 lg:-right-16",
-    icon: "⚡",
+    query: "5kVA inverter package installer Nairobi",
+    score: "91% Intent",
+    position: "bottom-4 right-0 sm:-right-4 lg:-right-12",
+    delay: 0.8,
   },
 ];
 
@@ -35,153 +53,126 @@ export function HeroSection() {
     document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section className="relative min-h-[92vh] flex items-center pt-24 pb-16 overflow-hidden bg-[#0D0820]">
-      {/* Sophisticated atmospheric background */}
+    <section className="relative pt-28 pb-20 md:pt-36 md:pb-28 bg-[#0D0820] text-white overflow-hidden">
+      {/* Background radial atmosphere */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Subtle grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: `radial-gradient(#8E64FF 1px, transparent 1px)`,
-            backgroundSize: "32px 32px",
-          }}
-        />
-
-        {/* Concentric radar rings */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-purple-500/10 rounded-full animate-pulse-glow" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] border border-purple-500/15 rounded-full" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] h-[260px] border border-brand-purple/20 rounded-full" />
-
-        {/* Soft radial glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-brand-purple/25 via-brand-accent/15 to-transparent blur-[140px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-purple/20 rounded-full blur-[140px]" />
       </div>
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center z-10">
-        {/* Live founding member badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-purple-400/20 backdrop-blur-md mb-8 shadow-sm"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-emerald opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-emerald" />
-          </span>
-          <span className="text-xs font-semibold text-purple-200 tracking-wide">
-            Phase 0 Waitlist — Founding Member Allocation Open
-          </span>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] tracking-tight mb-6 max-w-4xl mx-auto"
-        >
+        {/* Main Headline — No badges above */}
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.08] mb-6 max-w-4xl mx-auto">
           Find Buyers{" "}
-          <span className="font-serif italic font-normal text-gradient">Before</span>
-          <br className="hidden sm:block" />
-          {" "}They Find You.
-        </motion.h1>
+          <span className="font-serif italic font-normal text-gradient inline-block pr-2 sm:pr-3">
+            Before
+          </span>
+          <br />
+          They Find You.
+        </h1>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-base sm:text-lg lg:text-xl text-purple-200/80 max-w-2xl mx-auto mb-10 leading-relaxed font-normal"
-        >
-          {APP_NAME} monitors social media 24/7 to detect ready-to-buy customers asking for what you sell — and delivers qualified leads straight to your WhatsApp.
-        </motion.p>
+        {/* Short Value Proposition */}
+        <p className="text-base sm:text-lg lg:text-xl text-purple-200/80 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          Hunter scans social platforms 24/7 to detect people actively looking for what you sell, then delivers verified buyer leads directly to your WhatsApp.
+        </p>
 
-        {/* Floating Simulated Signal Detection Badges (Desktop & Tablet) */}
-        <div className="relative max-w-xl mx-auto">
-          {SIGNALS.map((sig, idx) => (
-            <motion.div
-              key={sig.platform}
-              initial={{ opacity: 0, scale: 0.8, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: [0, -6, 0] }}
-              transition={{
-                opacity: { delay: sig.delay, duration: 0.5 },
-                scale: { delay: sig.delay, duration: 0.5 },
-                y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: idx * 1.5 },
-              }}
-              className={`hidden md:flex absolute ${sig.position} z-20 items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-brand-dark/90 border border-purple-500/30 backdrop-blur-md shadow-xl text-left max-w-xs pointer-events-none`}
-            >
-              <span className="text-xl flex-shrink-0">{sig.icon}</span>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className="text-[10px] font-bold text-brand-accent uppercase tracking-wider">
-                    {sig.platform}
-                  </span>
-                  <span className="text-[10px] text-purple-400">· {sig.location}</span>
-                </div>
-                <p className="text-xs text-white font-medium truncate">{sig.text}</p>
-              </div>
-            </motion.div>
-          ))}
-
-          {/* Primary CTA & Guarantee */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
+        {/* Primary Clear CTA */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+          <Button
+            size="lg"
+            onClick={scrollToForm}
+            className="w-full sm:w-auto text-base font-semibold px-8 py-4 shadow-xl shadow-brand-purple/30 group"
           >
-            <Button
-              size="lg"
-              onClick={scrollToForm}
-              className="w-full sm:w-auto text-base font-semibold shadow-xl shadow-brand-purple/40 hover:shadow-brand-purple/60 group"
-            >
-              <Radar className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-              Claim Founding Member Access
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </motion.div>
+            <span>Get Early Access</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
         </div>
 
-        {/* Micro Trust Strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="flex flex-wrap items-center justify-center gap-6 text-xs text-purple-300/70 mb-12"
-        >
+        {/* Small Supporting Trust Line */}
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-purple-300/70 mb-16">
           <span className="inline-flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-brand-emerald" />
+            Free early access
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Zap className="w-4 h-4 text-purple-300" />
             No credit card required
           </span>
           <span className="inline-flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-brand-accent" />
-            Zero app installation needed
+            Direct WhatsApp delivery
           </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Zap className="w-4 h-4 text-amber-400" />
-            Instant WhatsApp setup
-          </span>
-        </motion.div>
+        </div>
 
-        {/* Highlight Stats Pill Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-2xl mx-auto"
-        >
-          {STATS.map(({ value, label }) => (
+        {/* Purposeful Buyer Discovery Visual Architecture */}
+        <div className="relative max-w-3xl mx-auto mt-4 pt-6">
+          {/* Central Circular Discovery Console */}
+          <div className="relative mx-auto w-48 h-48 sm:w-64 sm:h-64 flex items-center justify-center">
+            {/* Concentric scan rings */}
+            <div className="absolute inset-0 rounded-full border border-purple-500/20 animate-pulse-glow" />
+            <div className="absolute inset-4 rounded-full border border-purple-500/15" />
+            <div className="absolute inset-10 rounded-full border border-brand-purple/30" />
+
+            {/* Slow purposeful sweep line */}
             <div
-              key={label}
-              className="bg-white/[0.04] border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center backdrop-blur-sm hover:border-purple-400/30 transition-colors"
-            >
-              <p className="text-2xl sm:text-3xl font-extrabold text-white mb-0.5 tracking-tight font-sans">
-                {value}
-              </p>
-              <p className="text-xs text-purple-300/80 font-medium">{label}</p>
+              className="absolute inset-0 rounded-full pointer-events-none"
+              style={{
+                background: "conic-gradient(from 0deg, rgba(142, 100, 255, 0.15) 0deg, transparent 60deg, transparent 360deg)",
+                animation: "radar-sweep 12s linear infinite",
+              }}
+            />
+
+            {/* Central Hunter Core Node */}
+            <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-brand-purple to-brand-dark p-0.5 shadow-2xl shadow-brand-purple/50 flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-[#12082B] flex flex-col items-center justify-center p-3 text-center">
+                <span className="text-xs font-bold uppercase tracking-wider text-white">Hunter</span>
+                <span className="text-[10px] text-brand-accent font-medium mt-0.5">Active Scan</span>
+              </div>
             </div>
-          ))}
-        </motion.div>
+          </div>
+
+          {/* Surrounding Purposeful Intent Nodes (Visible on Tablet & Desktop) */}
+          <div className="hidden md:block">
+            {DISCOVERY_NODES.map((node) => (
+              <motion.div
+                key={node.category}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: node.delay, duration: 0.6 }}
+                className={`absolute ${node.position} z-20 text-left bg-[#140B2E]/90 border border-purple-500/20 backdrop-blur-md rounded-2xl p-3.5 max-w-[240px] shadow-lg`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-[10px] font-bold text-brand-accent uppercase tracking-wide">
+                    {node.category}
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                    {node.score}
+                  </span>
+                </div>
+                <p className="text-xs text-white font-medium line-clamp-1 mb-1">
+                  &ldquo;{node.query}&rdquo;
+                </p>
+                <span className="text-[10px] text-purple-300/60 block">{node.location}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Mobile Intent Node Strip */}
+          <div className="md:hidden mt-6 grid grid-cols-1 gap-2.5 text-left">
+            {DISCOVERY_NODES.slice(0, 2).map((node) => (
+              <div
+                key={node.category}
+                className="bg-[#140B2E]/80 border border-purple-500/20 rounded-xl p-3 text-xs"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-brand-accent text-[11px]">{node.category}</span>
+                  <span className="text-[10px] font-bold text-emerald-400">{node.score}</span>
+                </div>
+                <p className="text-white font-medium">&ldquo;{node.query}&rdquo;</p>
+                <span className="text-[10px] text-purple-300/60 mt-0.5 block">{node.location}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
