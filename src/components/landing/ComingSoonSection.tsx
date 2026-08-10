@@ -1,79 +1,105 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bell, Sparkles } from "lucide-react";
+import { Sparkles, BellRing, Check, ArrowRight } from "lucide-react";
 
-const UPCOMING_FEATURES = [
-  { emoji: "🤖", title: "AI WhatsApp Closer", desc: "Auto-reply to leads and close sales without lifting a finger" },
-  { emoji: "📊", title: "Sales Analytics Dashboard", desc: "Track conversions, revenue, and lead quality in real time" },
-  { emoji: "🎯", title: "Targeted Campaigns", desc: "Push your product to buyers in specific cities or demographics" },
-  { emoji: "🔗", title: "Multi-Platform Inbox", desc: "Unified inbox for all social media messages and leads" },
-  { emoji: "📦", title: "Inventory Integration", desc: "Connect your stock levels and auto-pause when sold out" },
-  { emoji: "🌍", title: "Pan-Africa Expansion", desc: "Coverage across 15+ African markets and 30+ languages" },
+const UPCOMING_CAPABILITIES = [
+  {
+    icon: "⚡",
+    title: "AI Auto-Closer for WhatsApp",
+    desc: "Autonomous conversational AI to answer buyer queries, share product catalogs, and confirm orders directly.",
+  },
+  {
+    icon: "📊",
+    title: "Conversion & Revenue Analytics",
+    desc: "Real-time visibility into lead volume, response speeds, closed revenue, and top-performing social channels.",
+  },
+  {
+    icon: "🎯",
+    title: "Hyper-Targeted Geofencing",
+    desc: "Filter buyer leads by exact local neighborhoods (e.g. Lekki, Ikeja, Westlands, East Legon, Sandton).",
+  },
+  {
+    icon: "💬",
+    title: "Unified Social Commerce Inbox",
+    desc: "Manage leads from Facebook, Instagram, WhatsApp, and TikTok in a single streamlined dashboard.",
+  },
+  {
+    icon: "📦",
+    title: "Inventory Stock Sync",
+    desc: "Connect your inventory so Hunter AI automatically prioritizes in-stock items and pauses sold-out goods.",
+  },
+  {
+    icon: "🌍",
+    title: "Pan-African Expansion Engine",
+    desc: "Seamless cross-border buyer discovery across 15+ African economies and 30+ regional languages.",
+  },
 ];
 
 export function ComingSoonSection() {
-  return (
-    <section className="py-24 relative">
-      {/* Background glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-brand-accent/10 blur-[100px]" />
-      </div>
+  const scrollToForm = () =>
+    document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth" });
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-accent/20 text-purple-300 text-sm font-semibold border border-brand-accent/30 mb-6">
-            <Sparkles className="w-4 h-4 text-brand-accent" />
-            After MVP Launch
+  return (
+    <section className="py-24 bg-[#F8F6FE] text-slate-900 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-light text-brand-purple text-xs font-bold uppercase tracking-wider mb-4 border border-purple-200">
+            <Sparkles className="w-3.5 h-3.5" />
+            Phase 1 & 2 Roadmap Preview
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            The Full Power Is{" "}
-            <span className="text-gradient">Coming Soon</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1A1033] tracking-tight mb-4">
+            The Complete SaaS is <span className="text-gradient-purple font-serif italic">Coming Soon</span>
           </h2>
-          <p className="text-purple-300/70 text-lg max-w-xl mx-auto">
-            Pricing and full feature access will be announced after the MVP launch. 
-            Founding members get first access and guaranteed best prices.
+          <p className="text-slate-600 text-base sm:text-lg">
+            Pricing and full platform access will be officially announced after our private MVP rollout. Waitlist members are guaranteed locked-in founder pricing.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-          {UPCOMING_FEATURES.map(({ emoji, title, desc }, i) => (
+        {/* Feature Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {UPCOMING_CAPABILITIES.map(({ icon, title, desc }, i) => (
             <motion.div
               key={title}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.4 }}
-              className="bg-glass rounded-2xl p-5 relative overflow-hidden group"
+              transition={{ delay: i * 0.07, duration: 0.4 }}
+              className="bg-white rounded-3xl p-6 border border-purple-100 shadow-md shadow-purple-950/5 hover:border-brand-purple/40 hover:shadow-lg transition-all duration-300"
             >
-              {/* Blur overlay for "coming soon" feel */}
-              <div className="absolute inset-0 bg-white/2 backdrop-blur-[1px] rounded-2xl opacity-0 group-hover:opacity-0" />
-              <div className="relative">
-                <span className="text-3xl mb-3 block">{emoji}</span>
-                <h3 className="font-bold text-white mb-1">{title}</h3>
-                <p className="text-sm text-purple-300/60 leading-relaxed">{desc}</p>
-              </div>
+              <span className="text-3xl mb-4 block">{icon}</span>
+              <h3 className="text-lg font-bold text-[#1A1033] mb-2">
+                {title}
+              </h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                {desc}
+              </p>
             </motion.div>
           ))}
         </div>
 
-        {/* Notify CTA */}
-        <div className="bg-glass rounded-2xl p-8 text-center border border-brand-accent/20">
-          <Bell className="w-8 h-8 text-brand-accent mx-auto mb-3" />
-          <h3 className="text-xl font-bold text-white mb-2">
-            Be the first to know when pricing drops
-          </h3>
-          <p className="text-purple-300/70 text-sm mb-6">
-            Join the waitlist now and we&apos;ll notify you the moment full access and pricing is live.
-            Founding members get locked-in founder rates — no price increases, ever.
-          </p>
+        {/* Founder Pricing Guarantee Banner */}
+        <div className="rounded-3xl bg-white p-8 sm:p-10 border border-purple-200 shadow-xl shadow-purple-950/5 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center flex-shrink-0 mt-1">
+              <BellRing className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-xl font-extrabold text-[#1A1033] mb-1.5">
+                Be First in Line When Pricing is Announced
+              </h3>
+              <p className="text-slate-600 text-sm max-w-xl leading-relaxed">
+                Founding members receive locked-in lifetime discounted rates, priority feature requests, and 1-on-1 WhatsApp onboarding.
+              </p>
+            </div>
+          </div>
+
           <button
-            onClick={() =>
-              document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="bg-gradient-to-r from-brand-purple to-brand-accent text-white font-semibold px-8 py-3 rounded-full hover:opacity-90 transition-opacity"
+            onClick={scrollToForm}
+            className="w-full md:w-auto px-7 py-3.5 rounded-full text-sm font-bold bg-brand-purple text-white hover:bg-brand-purple-hover transition-all duration-200 shadow-md shadow-brand-purple/30 flex items-center justify-center gap-2 flex-shrink-0"
           >
-            Join Waitlist — Get Founder Pricing
+            Lock in Founder Status <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

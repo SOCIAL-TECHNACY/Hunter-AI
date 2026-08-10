@@ -1,112 +1,123 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle, Circle, Lock } from "lucide-react";
+import { CheckCircle2, Lock, Users, ArrowRight } from "lucide-react";
 import { BATCH_TIMELINE } from "@/lib/constants";
 import { cn } from "@/lib/utils/cn";
 
-const STATUS_STYLES = {
-  boarding: {
-    badge: "bg-brand-emerald/20 text-emerald-300 border-brand-emerald/30",
-    label: "Boarding Now",
-    icon: CheckCircle,
-    ring: "ring-brand-emerald/40",
-  },
-  next: {
-    badge: "bg-brand-accent/20 text-purple-300 border-brand-accent/30",
-    label: "Up Next",
-    icon: Circle,
-    ring: "ring-brand-accent/30",
-  },
-  queued: {
-    badge: "bg-white/10 text-purple-400 border-white/10",
-    label: "Queued",
-    icon: Lock,
-    ring: "ring-white/10",
-  },
-  completed: {
-    badge: "bg-white/5 text-purple-500 border-white/5",
-    label: "Closed",
-    icon: CheckCircle,
-    ring: "ring-white/5",
-  },
-};
-
 export function BatchTimeline() {
+  const scrollToForm = () =>
+    document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth" });
+
   return (
-    <section id="early-access" className="py-24">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <p className="text-brand-accent text-sm font-semibold tracking-widest uppercase mb-3">
-            7-Day Early Access
+    <section id="early-access" className="py-24 bg-white text-slate-900 relative overflow-hidden">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <p className="text-brand-purple text-xs font-bold tracking-widest uppercase mb-3">
+            Phased Rollout Schedule
           </p>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Join the Right Batch.{" "}
-            <span className="text-gradient">Skip the Queue.</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1A1033] tracking-tight mb-4">
+            Early Access <span className="text-gradient-purple font-serif italic">Batches</span>
           </h2>
-          <p className="text-purple-300/70 text-lg max-w-xl mx-auto">
-            Founding members get lifetime discounts, first features, and dedicated support. Each batch closes fast.
+          <p className="text-slate-600 text-base sm:text-lg">
+            Access is granted in controlled cohorts to guarantee lightning-fast lead delivery speeds and dedicated onboarding for every business.
           </p>
         </div>
 
+        {/* Batch Cards */}
         <div className="space-y-4">
           {BATCH_TIMELINE.map((batch, i) => {
-            const style = STATUS_STYLES[batch.status];
-            const Icon = style.icon;
+            const isBoarding = batch.status === "boarding";
 
             return (
               <motion.div
                 key={batch.batchNumber}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
+                transition={{ delay: i * 0.1, duration: 0.4 }}
                 className={cn(
-                  "bg-glass rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4",
-                  batch.status === "boarding" && "ring-1 glow-sm",
-                  style.ring
+                  "rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all duration-200 border",
+                  isBoarding
+                    ? "bg-[#FAF9FF] border-brand-purple/40 shadow-lg shadow-purple-950/5 ring-2 ring-brand-purple/20"
+                    : "bg-white border-slate-200/80 shadow-sm opacity-80"
                 )}
               >
-                <div className="flex items-center gap-4 flex-1">
+                <div className="flex items-center gap-4">
                   <div
                     className={cn(
-                      "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
-                      batch.status === "boarding"
-                        ? "bg-brand-emerald/20"
-                        : "bg-white/5"
+                      "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0",
+                      isBoarding
+                        ? "bg-brand-emerald/15 text-brand-emerald"
+                        : "bg-slate-100 text-slate-400"
                     )}
                   >
-                    <Icon
-                      className={cn(
-                        "w-6 h-6",
-                        batch.status === "boarding" ? "text-brand-emerald" : "text-purple-400"
-                      )}
-                    />
+                    {isBoarding ? (
+                      <CheckCircle2 className="w-6 h-6" />
+                    ) : (
+                      <Lock className="w-5 h-5" />
+                    )}
                   </div>
                   <div>
-                    <p className="font-bold text-white">{batch.label}</p>
-                    <p className="text-sm text-purple-400">
-                      {batch.capacity} spots · Starts {batch.startDate}
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-extrabold text-lg text-[#1A1033]">
+                        {batch.label}
+                      </h3>
+                      {isBoarding && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand-emerald/15 text-emerald-700 border border-brand-emerald/30">
+                          <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse" />
+                          Boarding Now
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                      Capacity: {batch.capacity} verified businesses · Window: {batch.startDate}
                     </p>
                   </div>
                 </div>
 
-                <span
-                  className={cn(
-                    "px-3 py-1 rounded-full text-xs font-semibold border",
-                    style.badge
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                  {isBoarding ? (
+                    <button
+                      onClick={scrollToForm}
+                      className="w-full sm:w-auto text-xs font-bold text-brand-purple hover:text-brand-purple-hover flex items-center justify-center sm:justify-start gap-1 py-2 px-4 rounded-xl bg-purple-100 hover:bg-purple-200 transition-colors"
+                    >
+                      Claim Spot <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  ) : (
+                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                      Queued
+                    </span>
                   )}
-                >
-                  {style.label}
-                </span>
+                </div>
               </motion.div>
             );
           })}
         </div>
 
-        <p className="text-center text-purple-400/60 text-sm mt-8">
-          Refer 3 businesses to unlock early access — regardless of queue position.
-        </p>
+        {/* Jump queue callout card */}
+        <div className="mt-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-purple-50 via-brand-light to-purple-50 border border-purple-200 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-left">
+            <div className="w-10 h-10 rounded-xl bg-brand-purple/10 text-brand-purple flex items-center justify-center flex-shrink-0">
+              <Users className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-[#1A1033]">
+                Want to skip straight to Batch 1?
+              </p>
+              <p className="text-xs text-slate-600">
+                Refer 3 other business owners to jump to the front of the queue immediately.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={scrollToForm}
+            className="flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-brand-purple text-white hover:bg-brand-purple-hover transition-colors shadow-sm"
+          >
+            Get Referral Code
+          </button>
+        </div>
       </div>
     </section>
   );

@@ -1,79 +1,88 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, Clock, Globe, TrendingUp, Phone, Cpu } from "lucide-react";
+import { Clock, Globe2, PhoneCall, Languages, ShieldCheck, Cpu } from "lucide-react";
 
 const BENEFITS = [
   {
     icon: Clock,
-    title: "Works While You Sleep",
+    title: "Always Hunting While You Sleep",
     description:
-      "Hunter AI runs 24/7 so you never miss a buyer even at 3am when your competitors are offline.",
+      "Hunter AI stays awake 24/7, catching early morning and late night buyer requests when your competition is offline.",
   },
   {
-    icon: Globe,
+    icon: Languages,
+    title: "Trained on African Dialects",
+    description:
+      "Understands Nigerian Pidgin, Yoruba, Igbo, Hausa, Sheng, Swahili, Twi, and French to spot genuine local demand.",
+  },
+  {
+    icon: PhoneCall,
+    title: "Zero Apps. 100% WhatsApp.",
+    description:
+      "No complicated CRM software to install. Leads arrive as pre-formatted cards directly on your WhatsApp phone number.",
+  },
+  {
+    icon: Globe2,
     title: "Multi-Platform Coverage",
     description:
-      "Facebook, Instagram, TikTok, Twitter, Telegram and WhatsApp groups — all scanned simultaneously.",
+      "Simultaneously tracks public buyer posts across Facebook Groups, Instagram comments, TikTok, and Twitter/X.",
   },
   {
-    icon: Phone,
-    title: "Delivered to WhatsApp",
+    icon: ShieldCheck,
+    title: "Verified Intent Filtering",
     description:
-      "No apps to learn. Leads arrive directly in your WhatsApp as clean, actionable cards.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Speaks Your Language",
-    description:
-      "Understands Pidgin, Yoruba, Igbo, Hausa, Swahili, Twi, and 20+ African dialects to find more buyers.",
-  },
-  {
-    icon: Shield,
-    title: "Verified Intent Only",
-    description:
-      "AI filters out spam and non-buyers. Only people actively looking to purchase reach your inbox.",
+      "Proprietary AI filters out casual browsers, spam, and sellers. Only customers ready to buy reach your notifications.",
   },
   {
     icon: Cpu,
-    title: "Learns Your Business",
+    title: "Self-Learning Precision",
     description:
-      "The more you use it, the smarter it gets. Hunter AI adapts to your niche and customer patterns.",
+      "Hunter AI learns your specific inventory, price ranges, and target cities over time to deliver higher quality leads.",
   },
 ];
 
 export function BenefitsSection() {
   return (
-    <section id="benefits" className="py-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <p className="text-brand-accent text-sm font-semibold tracking-widest uppercase mb-3">
+    <section id="benefits" className="py-24 bg-[#F4F0FF] relative overflow-hidden">
+      {/* Decorative subtle gradient */}
+      <div className="absolute top-1/2 left-0 w-72 h-72 bg-purple-300/30 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <p className="text-brand-purple text-xs font-bold tracking-widest uppercase mb-3">
             Why Hunter AI
           </p>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Built for African{" "}
-            <span className="text-gradient">Hustle Culture</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1A1033] tracking-tight mb-4">
+            Engineered for African <span className="text-gradient-purple font-serif italic">Commerce</span>
           </h2>
-          <p className="text-purple-300/70 text-lg max-w-xl mx-auto">
-            No cold calling. No ads budget. Just warm, ready-to-buy customers delivered to you automatically.
+          <p className="text-slate-600 text-base sm:text-lg">
+            Built specifically around the way real business happens across Lagos, Nairobi, Accra, Johannesburg, and beyond.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Benefits Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {BENEFITS.map(({ icon: Icon, title, description }, i) => (
             <motion.div
               key={title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="group bg-glass rounded-2xl p-6 hover:border-brand-accent/30 transition-colors duration-300"
+              transition={{ delay: i * 0.08, duration: 0.5 }}
+              className="bg-white rounded-3xl p-7 border border-purple-200/70 shadow-md shadow-purple-950/5 hover:border-brand-purple hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
             >
-              <div className="w-12 h-12 rounded-xl bg-brand-purple/20 flex items-center justify-center mb-4 group-hover:bg-brand-purple/30 transition-colors">
-                <Icon className="w-6 h-6 text-brand-accent" />
+              <div className="w-12 h-12 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center mb-5 shadow-sm">
+                <Icon className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-              <p className="text-purple-300/70 text-sm leading-relaxed">{description}</p>
+              <h3 className="text-lg font-bold text-[#1A1033] mb-2.5">
+                {title}
+              </h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                {description}
+              </p>
             </motion.div>
           ))}
         </div>

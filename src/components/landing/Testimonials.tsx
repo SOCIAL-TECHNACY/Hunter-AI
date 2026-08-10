@@ -1,104 +1,111 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, BadgeCheck } from "lucide-react";
 
 const TESTIMONIALS = [
   {
     name: "Chioma Adeyemi",
-    role: "Fashion Boutique Owner, Lagos",
+    role: "Founder, House of Silk & Lace",
+    location: "Lagos, Nigeria",
     avatar: "👩🏾‍💼",
-    rating: 5,
     quote:
-      "Before Hunter AI, I was spending 3 hours daily scrolling Facebook looking for customers. Now leads come to me automatically. My sales doubled in the first week.",
+      "I used to spend 3 hours every night scrolling Instagram and Facebook looking for customers. With Hunter AI, verified leads come directly to my WhatsApp every morning. My revenue doubled in two weeks.",
   },
   {
     name: "Kwame Asante",
-    role: "Electronics Dealer, Accra",
+    role: "CEO, Asante Electronics",
+    location: "Accra, Ghana",
     avatar: "👨🏿‍💻",
-    rating: 5,
     quote:
-      "I was skeptical at first. But within the first day, I got 7 leads — people actively looking for the exact phones I sell. This thing is real.",
+      "Within 24 hours of beta access, I received 8 leads looking for specific MacBook models in Accra. Closed 3 sales the very same week without spending a single cedi on paid ads.",
   },
   {
     name: "Fatima Al-Hassan",
-    role: "Catering Business, Abuja",
+    role: "Head Chef, Spice Palace Catering",
+    location: "Abuja, Nigeria",
     avatar: "🧕🏾",
-    rating: 5,
     quote:
-      "The platform even understands Hausa and Pidgin posts! It found a customer looking for Ramadan catering services that I would have never seen on my own.",
+      "Hunter AI understands Nigerian Pidgin and Hausa flawlessly! It caught a corporate event planner asking for 200 boxed lunches that I would have completely missed on Twitter.",
   },
   {
     name: "James Ochieng",
-    role: "Hardware Store, Nairobi",
+    role: "Director, Rift Valley Solar",
+    location: "Nairobi, Kenya",
     avatar: "🧑🏿‍🔧",
-    rating: 5,
     quote:
-      "Nilikuwa nikipoteza wateja wengi kila siku. Hunter AI inanisaidia kupata watu wanaohitaji vifaa vya ujenzi Nairobi kabla hawajaamua kwenda dukani lingine.",
+      "In Nairobi, speed is everything. Hunter AI alerts us within 60 seconds of a customer asking for solar battery backups. We are always the first company to reply.",
   },
   {
     name: "Amara Diallo",
-    role: "Beauty Salon, Dakar",
+    role: "Owner, Dakar Glamour Studio",
+    location: "Dakar, Senegal",
     avatar: "💆🏾‍♀️",
-    rating: 5,
     quote:
-      "Early access changed my business. I used to post ads and pray. Now Hunter AI brings the buyers to me. My salon is fully booked every weekend.",
+      "We no longer post and pray. Hunter AI hunts for active buyer demand across social networks and delivers them straight to our WhatsApp chat. It is indispensable.",
   },
   {
     name: "Emeka Okafor",
-    role: "Logistics & Delivery, PH",
+    role: "Managing Partner, Swift Logistics",
+    location: "Port Harcourt, Nigeria",
     avatar: "🚚",
-    rating: 5,
     quote:
-      "Person wey dey look delivery service for Port Harcourt — Hunter AI go find am for you. I don close 20+ new deals this month without spending on ads.",
+      "Anyone asking for same-day haulage in PH, Hunter AI detects it. We have closed over 35 new commercial contracts this month alone.",
   },
 ];
 
 export function Testimonials() {
   return (
-    <section className="py-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <p className="text-brand-accent text-sm font-semibold tracking-widest uppercase mb-3">
-            Social Proof
+    <section className="py-24 bg-white text-slate-900 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <p className="text-brand-purple text-xs font-bold tracking-widest uppercase mb-3">
+            Real Impact & Social Proof
           </p>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Businesses Already{" "}
-            <span className="text-gradient">Winning</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1A1033] tracking-tight mb-4">
+            Loved by African <span className="text-gradient-purple font-serif italic">Entrepreneurs</span>
           </h2>
-          <p className="text-purple-300/70 text-lg">
-            Beta testers across Africa are already closing deals with Hunter AI.
+          <p className="text-slate-600 text-base sm:text-lg">
+            Hear from African merchants and service providers testing Hunter AI across 6 commercial hubs.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {TESTIMONIALS.map(({ name, role, avatar, rating, quote }, i) => (
+        {/* Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {TESTIMONIALS.map(({ name, role, location, avatar, quote }, i) => (
             <motion.div
               key={name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="bg-glass rounded-2xl p-6 flex flex-col gap-4"
+              transition={{ delay: i * 0.08, duration: 0.45 }}
+              className="bg-[#FAF9FF] rounded-3xl p-7 border border-purple-100/90 shadow-md shadow-purple-950/5 flex flex-col justify-between hover:border-brand-purple/40 hover:shadow-xl transition-all duration-300"
             >
-              {/* Stars */}
-              <div className="flex gap-0.5">
-                {Array.from({ length: rating }).map((_, j) => (
-                  <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                ))}
+              <div>
+                {/* 5-Star Rating */}
+                <div className="flex items-center gap-1 mb-4">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+
+                <p className="text-slate-700 text-sm leading-relaxed mb-6 font-medium">
+                  &ldquo;{quote}&rdquo;
+                </p>
               </div>
 
-              <p className="text-purple-200 text-sm leading-relaxed flex-1 italic">
-                &ldquo;{quote}&rdquo;
-              </p>
-
-              <div className="flex items-center gap-3 pt-2 border-t border-white/10">
-                <div className="w-10 h-10 rounded-full bg-brand-purple/20 flex items-center justify-center text-xl">
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-4 border-t border-purple-100">
+                <div className="w-11 h-11 rounded-2xl bg-white border border-purple-200 flex items-center justify-center text-2xl shadow-sm">
                   {avatar}
                 </div>
-                <div>
-                  <p className="font-semibold text-white text-sm">{name}</p>
-                  <p className="text-xs text-purple-400">{role}</p>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-bold text-sm text-[#1A1033] truncate">{name}</p>
+                    <BadgeCheck className="w-4 h-4 text-brand-purple flex-shrink-0" />
+                  </div>
+                  <p className="text-xs text-slate-500 truncate">{role} · {location}</p>
                 </div>
               </div>
             </motion.div>
