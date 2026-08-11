@@ -15,31 +15,49 @@ export class WaitlistService {
   private readonly emailService = new EmailService();
 
   async join(payload: JoinWaitlistPayload): Promise<JoinResult> {
-    const [emailConflict, whatsappConflict] = await Promise.all([
-      this.repository.findByEmail(payload.email),
-      this.repository.findByWhatsApp(payload.whatsapp),
-    ]);
+    // 1. Check for duplicates
+    try {
+      const [emailConflict, whatsappConflict] = await Promise.all([
+        this.repository.findByEmail(payload.email),
+        this.repository.findByWhatsApp(payload.whatsapp),
+      ]);
 
-    if (emailConflict) {
-      return { success: false, error: "This email is already on the waitlist." };
+      if (emailConflict) {
+        return { success: false, error: "This email is already on the waitlist." };
+      }
+
+      if (whatsappConflict) {
+        return { success: false, error: "This WhatsApp number is already registered on the waitlist." };
+      }
+    } catch (checkErr) {
+      console.warn("[WaitlistService] Pre-check warning:", checkErr);
+      // Proceed to create if check had non-fatal issue; database UNIQUE constraints will enforce uniqueness
     }
 
-    if (whatsappConflict) {
-      return { success: false, error: "This WhatsApp number is already registered." };
-    }
-
+    // 2. Validate referral code if provided
     if (payload.referralCode) {
-      const referrer = await this.repository.findByReferralCode(payload.referralCode);
-      if (!referrer) {
-        return { success: false, error: "The referral code entered is invalid." };
+      try {
+        const referrer = await this.repository.findByReferralCode(payload.referralCode);
+        if (!referrer) {
+          return { success: false, error: "The referral code entered is invalid." };
+        }
+      } catch (refErr) {
+        console.warn("[WaitlistService] Referrer check warning:", refErr);
       }
     }
 
+    // 3. Create entry in database
     const entry = await this.repository.create(payload);
     const referralUrl = buildReferralUrl(entry.referralCode, APP_URL);
 
-    await this.emailService.sendWelcome({ entry, referralUrl });
-    await this.emailService.notifyAdmin({ entry, referralUrl });
+    // 4. Asynchronous non-blocking notifications
+    // Email delivery must NEVER block or fail a successful database registration
+    Promise.allSettled([
+      this.emailService.sendWelcome({ entry, referralUrl }),
+      this.emailService.notifyAdmin({ entry, referralUrl }),
+    ]).catch((emailErr) => {
+      console.warn("[WaitlistService] Non-fatal notification error:", emailErr);
+    });
 
     return { success: true, entry };
   }

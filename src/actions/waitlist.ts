@@ -36,14 +36,14 @@ export async function joinWaitlistAction(
     });
 
     if (!result.success) {
-      return { success: false, error: result.error };
+      return { success: false, error: result.error || "Unable to complete registration." };
     }
 
     return { success: true, data: result.entry };
   } catch (err) {
-    const message = err instanceof Error ? err.message : "An unexpected error occurred.";
-    console.error("[joinWaitlistAction]", message);
-    return { success: false, error: "Something went wrong. Please try again." };
+    const message = err instanceof Error ? err.message : "Registration failed. Please try again.";
+    console.error("[Waitlist] joinWaitlistAction error:", message);
+    return { success: false, error: message };
   }
 }
 
@@ -55,8 +55,8 @@ export async function getReferralEntryAction(code: string): Promise<ActionResult
     if (!entry) return { success: false, error: "Referral code not found." };
     return { success: true, data: entry };
   } catch (err) {
-    const message = err instanceof Error ? err.message : "An unexpected error occurred.";
-    console.error("[getReferralEntryAction]", message);
-    return { success: false, error: "Failed to look up referral code." };
+    const message = err instanceof Error ? err.message : "Failed to look up referral code.";
+    console.error("[Waitlist] getReferralEntryAction error:", message);
+    return { success: false, error: message };
   }
 }

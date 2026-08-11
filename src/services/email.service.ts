@@ -20,23 +20,46 @@ interface SendResult {
 }
 
 export class EmailService {
-  private readonly resend: Resend;
+  private resend: Resend | null = null;
   private readonly adminEmail: string;
   private readonly fromAddress = "Hunter AI <no-reply@socialtechnancy.com>";
 
   constructor() {
-    this.resend = new Resend(process.env.RESEND_API_KEY);
+    const apiKey = process.env.RESEND_API_KEY;
+    if (apiKey && apiKey !== "your-resend-api-key-here" && apiKey.startsWith("re_")) {
+      try {
+        this.resend = new Resend(apiKey);
+      } catch (err) {
+        console.warn("[EmailService] Failed to initialize Resend client:", err);
+      }
+    }
     this.adminEmail = process.env.ADMIN_EMAIL ?? "admin@socialtechnancy.com";
   }
 
   async sendWelcome(ctx: EmailContext): Promise<SendResult> {
-    const { subject, html } = welcomeEmailTemplate(ctx.entry, ctx.referralUrl);
-    return this.send({ to: ctx.entry.email, subject, html });
+    if (!this.resend) {
+      return { success: false, error: "Resend not configured" };
+    }
+    try {
+      const { subject, html } = welcomeEmailTemplate(ctx.entry, ctx.referralUrl);
+      return await this.send({ to: ctx.entry.email, subject, html });
+    } catch (err) {
+      console.warn("[EmailService] sendWelcome failed (non-blocking):", err);
+      return { success: false, error: "Email delivery failed" };
+    }
   }
 
   async notifyAdmin(ctx: EmailContext): Promise<SendResult> {
-    const { subject, html } = adminNotificationTemplate(ctx.entry, ctx.referralUrl);
-    return this.send({ to: this.adminEmail, subject, html });
+    if (!this.resend) {
+      return { success: false, error: "Resend not configured" };
+    }
+    try {
+      const { subject, html } = adminNotificationTemplate(ctx.entry, ctx.referralUrl);
+      return await this.send({ to: this.adminEmail, subject, html });
+    } catch (err) {
+      console.warn("[EmailService] notifyAdmin failed (non-blocking):", err);
+      return { success: false, error: "Email delivery failed" };
+    }
   }
 
   async sendWeeklyUpdate(to: string, entry: WaitlistEntry, referralUrl: string): Promise<SendResult> {
@@ -68,6 +91,9 @@ export class EmailService {
     subject: string;
     html: string;
   }): Promise<SendResult> {
+    if (!this.resend) {
+      return { success: false, error: "Resend client not active" };
+    }
     try {
       const { error } = await this.resend.emails.send({
         from: this.fromAddress,
@@ -77,14 +103,14 @@ export class EmailService {
       });
 
       if (error) {
-        console.error("[EmailService] Resend error:", error);
+        console.warn("[EmailService] Resend API error (non-fatal):", error.message);
         return { success: false, error: error.message };
       }
 
       return { success: true };
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
-      console.error("[EmailService] Unexpected error:", message);
+      console.warn("[EmailService] Email send error (non-fatal):", message);
       return { success: false, error: message };
     }
   }

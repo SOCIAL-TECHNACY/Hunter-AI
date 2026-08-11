@@ -39,10 +39,13 @@ export class WaitlistRepository {
     const res = await (this.db
       .from("waitlist")
       .select("*")
-      .eq("email", email)
+      .eq("email", email.trim().toLowerCase())
       .maybeSingle() as unknown as Promise<{ data: Record<string, unknown> | null; error: { message: string } | null }>);
 
-    if (res.error) throw new Error(res.error.message);
+    if (res.error) {
+      console.warn("[WaitlistRepository] findByEmail error:", res.error.message);
+      return null;
+    }
     if (!res.data) return null;
     return mapRowToEntry(res.data);
   }
@@ -51,10 +54,13 @@ export class WaitlistRepository {
     const res = await (this.db
       .from("waitlist")
       .select("*")
-      .eq("whatsapp", whatsapp)
+      .eq("whatsapp", whatsapp.trim())
       .maybeSingle() as unknown as Promise<{ data: Record<string, unknown> | null; error: { message: string } | null }>);
 
-    if (res.error) throw new Error(res.error.message);
+    if (res.error) {
+      console.warn("[WaitlistRepository] findByWhatsApp error:", res.error.message);
+      return null;
+    }
     if (!res.data) return null;
     return mapRowToEntry(res.data);
   }
@@ -63,21 +69,31 @@ export class WaitlistRepository {
     const res = await (this.db
       .from("waitlist")
       .select("*")
-      .eq("referral_code", code)
+      .eq("referral_code", code.trim().toUpperCase())
       .maybeSingle() as unknown as Promise<{ data: Record<string, unknown> | null; error: { message: string } | null }>);
 
-    if (res.error) throw new Error(res.error.message);
+    if (res.error) {
+      console.warn("[WaitlistRepository] findByReferralCode error:", res.error.message);
+      return null;
+    }
     if (!res.data) return null;
     return mapRowToEntry(res.data);
   }
 
   async getNextPosition(): Promise<number> {
-    const { count, error } = await this.db
-      .from("waitlist")
-      .select("*", { count: "exact", head: true });
+    try {
+      const { count, error } = await this.db
+        .from("waitlist")
+        .select("*", { count: "exact", head: true });
 
-    if (error) throw new Error(error.message);
-    return (count ?? 0) + 1;
+      if (error) {
+        console.warn("[WaitlistRepository] getNextPosition count error:", error.message);
+        return 1;
+      }
+      return (count ?? 0) + 1;
+    } catch {
+      return 1;
+    }
   }
 
   async create(payload: JoinWaitlistPayload): Promise<WaitlistEntry> {
@@ -85,21 +101,21 @@ export class WaitlistRepository {
     const referralCode = generateReferralCode(payload.businessName);
 
     const insertData = {
-      business_name: payload.businessName,
-      owner_name: payload.ownerName,
-      email: payload.email,
-      whatsapp: payload.whatsapp,
+      business_name: payload.businessName.trim(),
+      owner_name: payload.ownerName.trim(),
+      email: payload.email.trim().toLowerCase(),
+      whatsapp: payload.whatsapp.trim(),
       business_niche: payload.businessNiche,
-      business_description: payload.businessDescription ?? null,
-      ideal_customer: payload.idealCustomer ?? null,
-      city: payload.city,
-      location: payload.location,
-      country: payload.country,
+      business_description: payload.businessDescription?.trim() ?? null,
+      ideal_customer: payload.idealCustomer?.trim() ?? null,
+      city: payload.city.trim(),
+      location: payload.location.trim(),
+      country: payload.country || "Nigeria",
       platforms: payload.platforms ?? ["instagram", "facebook"],
       languages: payload.languages ?? ["pidgin", "english"],
-      source: payload.source ?? "direct",
+      source: payload.source ?? "landing_page",
       referral_code: referralCode,
-      referred_by: payload.referralCode ?? null,
+      referred_by: payload.referralCode?.trim().toUpperCase() ?? null,
       referrals_count: 0,
       points: BASE_REGISTRATION_POINTS,
       position,
@@ -110,10 +126,20 @@ export class WaitlistRepository {
       .from("waitlist")
       .insert(insertData as never)
       .select("*")
-      .single() as unknown as Promise<{ data: Record<string, unknown> | null; error: { message: string } | null }>);
+      .single() as unknown as Promise<{ data: Record<string, unknown> | null; error: { message: string; code?: string } | null }>);
 
-    if (res.error) throw new Error(res.error.message);
-    if (!res.data) throw new Error("Failed to insert waitlist entry.");
+    if (res.error) {
+      console.error("[WaitlistRepository] create insert error:", res.error);
+      if (res.error.message?.includes("waitlist_email_key") || res.error.message?.includes("email")) {
+        throw new Error("This email is already on the waitlist.");
+      }
+      if (res.error.message?.includes("waitlist_whatsapp_key") || res.error.message?.includes("whatsapp")) {
+        throw new Error("This WhatsApp number is already registered on the waitlist.");
+      }
+      throw new Error(res.error.message || "Failed to save waitlist registration.");
+    }
+
+    if (!res.data) throw new Error("Failed to retrieve created waitlist entry.");
     return mapRowToEntry(res.data);
   }
 
@@ -127,7 +153,10 @@ export class WaitlistRepository {
       .order("position", { ascending: true })
       .range(from, to) as unknown as Promise<{ data: Record<string, unknown>[] | null; count: number | null; error: { message: string } | null }>);
 
-    if (res.error) throw new Error(res.error.message);
+    if (res.error) {
+      console.error("[WaitlistRepository] listAll error:", res.error.message);
+      return { entries: [], total: 0 };
+    }
 
     return {
       entries: (res.data ?? []).map((row) => mapRowToEntry(row)),
@@ -140,7 +169,16 @@ export class WaitlistRepository {
       .from("waitlist")
       .select("location, business_niche, referrals_count, points") as unknown as Promise<{ data: Record<string, unknown>[] | null; error: { message: string } | null }>);
 
-    if (res.error) throw new Error(res.error.message);
+    if (res.error) {
+      console.error("[WaitlistRepository] getStats error:", res.error.message);
+      return {
+        totalCount: 0,
+        byLocation: {},
+        byNiche: {},
+        totalReferrals: 0,
+        averagePoints: 0,
+      };
+    }
 
     const rows = res.data ?? [];
     const byLocation: Record<string, number> = {};
