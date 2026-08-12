@@ -13,10 +13,16 @@ interface AccordionItem {
 interface AccordionProps {
   items: AccordionItem[];
   variant?: "light" | "dark";
+  defaultOpenIndex?: number | null;
 }
 
-export function Accordion({ items, variant = "light" }: AccordionProps) {
-  const [openId, setOpenId] = useState<string | null>(null);
+export function Accordion({ items, variant = "light", defaultOpenIndex = 0 }: AccordionProps) {
+  const initialOpenId =
+    defaultOpenIndex !== null && defaultOpenIndex !== undefined && items[defaultOpenIndex]
+      ? items[defaultOpenIndex].id
+      : null;
+
+  const [openId, setOpenId] = useState<string | null>(initialOpenId);
 
   const toggle = (id: string) => setOpenId((prev) => (prev === id ? null : id));
   const isLight = variant === "light";

@@ -30,9 +30,9 @@ const FAQ_ITEMS: AccordionItem[] = [
   },
   {
     id: "q5",
-    question: "How does the referral system work?",
+    question: "How does the referral link work?",
     answer:
-      "Joining the waitlist gives you 10 base points. Every business that registers using your unique referral code awards you 100 points. Referring 3 businesses automatically unlocks priority Batch 1 access.",
+      "Upon registration, you receive a unique referral link. Sharing this link with other merchants allows them to secure 7 full days of early access at launch and join your merchant network.",
   },
   {
     id: "q6",
@@ -111,7 +111,7 @@ export function FAQSection() {
 
           {/* Right Column: Clean Accordion */}
           <div className="lg:col-span-7">
-            <Accordion items={FAQ_ITEMS} variant="light" />
+            <Accordion items={FAQ_ITEMS} variant="light" defaultOpenIndex={0} />
           </div>
         </div>
       </div>

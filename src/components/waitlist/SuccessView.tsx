@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Copy, Check, Share2, Users, Trophy } from "lucide-react";
+import { Copy, Check, Share2, Users, ShieldCheck } from "lucide-react";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/Button";
 import { buildReferralUrl } from "@/lib/utils/code-generator";
 import { formatPosition } from "@/lib/utils/formatters";
-import { getRankTier } from "@/lib/utils/referral-calculator";
 import { APP_URL, APP_NAME } from "@/lib/constants";
 import type { WaitlistEntry } from "@/types/waitlist";
 
@@ -18,7 +17,6 @@ interface SuccessViewProps {
 export function SuccessView({ entry }: SuccessViewProps) {
   const [copied, setCopied] = useState(false);
   const referralUrl = buildReferralUrl(entry.referralCode, APP_URL);
-  const rank = getRankTier(entry.points);
 
   useEffect(() => {
     confetti({
@@ -39,7 +37,7 @@ export function SuccessView({ entry }: SuccessViewProps) {
     const text = encodeURIComponent(
       `Hey! I just secured my spot on the ${APP_NAME} early access waitlist 🎯\n\n` +
         `${APP_NAME} automatically finds customers on social media who are actively searching for what you sell — and delivers them directly to your WhatsApp!\n\n` +
-        `Claim your 7 days of early access through my link:\n${referralUrl}`
+        `Claim your 7 days of early access at launch through my link:\n${referralUrl}`
     );
     window.open(`https://wa.me/?text=${text}`, "_blank");
   };
@@ -54,39 +52,29 @@ export function SuccessView({ entry }: SuccessViewProps) {
       >
         <div className="bg-white rounded-3xl p-7 sm:p-10 text-center shadow-2xl shadow-purple-950/40 border border-purple-100">
           {/* Badge */}
-          <span className="inline-block px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-brand-emerald text-xs font-bold uppercase tracking-wider mb-4">
+          <span className="inline-block px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-brand-emerald text-xs font-bold uppercase tracking-wider mb-4">
             Registration Confirmed
           </span>
 
-          <h2 className="text-3xl font-extrabold text-[#1A1033] tracking-tight mb-2">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1A1033] tracking-tight mb-2">
             You&apos;re on the List! 🎉
           </h2>
-          <p className="text-slate-600 text-sm mb-8">
+          <p className="text-slate-600 text-sm sm:text-base mb-8">
             Welcome, <strong className="text-slate-900">{entry.ownerName.split(" ")[0]}</strong>!{" "}
-            <span className="text-brand-purple font-semibold">{entry.businessName}</span> is registered for 7 days of early access at launch.
+            <span className="text-brand-purple font-semibold">{entry.businessName}</span> is registered for <strong>7 days of early access</strong> at launch.
           </p>
 
-          {/* Position & Points Card */}
+          {/* Position Card */}
           <div className="bg-[#FAF9FF] border border-purple-100 rounded-2xl p-6 mb-6">
-            <div className="grid grid-cols-2 gap-4 divide-x divide-purple-100">
-              <div className="text-center pr-2">
-                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                  Queue Position
-                </p>
-                <p className="text-4xl sm:text-5xl font-black text-[#1A1033] tracking-tight font-mono">
-                  {formatPosition(entry.position)}
-                </p>
-              </div>
-              <div className="text-center pl-2">
-                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center justify-center gap-1">
-                  <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                  Your Rank
-                </p>
-                <p className="text-2xl sm:text-3xl font-extrabold text-brand-purple tracking-tight">
-                  {rank}
-                </p>
-                <p className="text-xs text-slate-500 font-medium mt-0.5">{entry.points} pts earned</p>
-              </div>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Your Queue Position
+            </p>
+            <p className="text-5xl sm:text-6xl font-black text-[#1A1033] tracking-tight font-mono mb-2">
+              {formatPosition(entry.position)}
+            </p>
+            <div className="flex items-center justify-center gap-1.5 text-xs text-brand-purple font-semibold">
+              <ShieldCheck className="w-4 h-4 text-brand-emerald" />
+              <span>7 Full Days Access Guaranteed at Launch</span>
             </div>
           </div>
 
@@ -124,17 +112,17 @@ export function SuccessView({ entry }: SuccessViewProps) {
             </button>
           </div>
 
-          {/* Queue Jump Hint */}
-          <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 mb-6 text-left flex items-start gap-3">
-            <div className="w-9 h-9 rounded-xl bg-brand-emerald/15 text-brand-emerald flex items-center justify-center flex-shrink-0 mt-0.5">
+          {/* Referral Sharing Callout */}
+          <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4 mb-6 text-left flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl bg-brand-purple/10 text-brand-purple flex items-center justify-center flex-shrink-0 mt-0.5">
               <Users className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-xs font-bold text-emerald-950 mb-0.5">
-                Move Up the Queue
+              <p className="text-xs font-bold text-slate-900 mb-0.5">
+                Invite Fellow Business Owners
               </p>
-              <p className="text-xs text-emerald-800 leading-relaxed">
-                Earn <strong>+100 points</strong> for every business you invite. Refer <strong>3 businesses</strong> to jump straight to priority Batch 1 access.
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Share your referral link with other merchants so they can also claim 7 full days of access when Hunter launches.
               </p>
             </div>
           </div>

@@ -105,24 +105,32 @@ export function HeroSection() {
 
         {/* Purposeful Buyer Discovery Visual Architecture */}
         <div className="relative max-w-3xl mx-auto mt-4 pt-6">
-          {/* Central Circular Discovery Console */}
-          <div className="relative mx-auto w-48 h-48 sm:w-64 sm:h-64 flex items-center justify-center">
-            {/* Concentric scan rings */}
-            <div className="absolute inset-0 rounded-full border border-purple-500/20 animate-pulse-glow" />
-            <div className="absolute inset-4 rounded-full border border-purple-500/15" />
-            <div className="absolute inset-10 rounded-full border border-brand-purple/30" />
+          {/* Central Circular Discovery Console with Continuous Orbital Rotation */}
+          <div className="relative mx-auto w-52 h-52 sm:w-64 sm:h-64 flex items-center justify-center">
+            {/* Outer Orbit Track with subtle beacon points */}
+            <div className="absolute inset-0 rounded-full border border-purple-500/20 motion-safe:animate-orbit-slow">
+              <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-brand-accent shadow-sm" />
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
+            </div>
+
+            {/* Middle Counter-Rotating Ring */}
+            <div className="absolute inset-4 rounded-full border border-dashed border-purple-400/25 motion-safe:animate-orbit-reverse">
+              <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 rounded-full bg-brand-purple" />
+            </div>
+
+            {/* Inner Static Boundary Ring */}
+            <div className="absolute inset-9 rounded-full border border-purple-500/20" />
 
             {/* Slow purposeful sweep line */}
             <div
-              className="absolute inset-0 rounded-full pointer-events-none"
+              className="absolute inset-0 rounded-full pointer-events-none motion-safe:animate-radar-sweep"
               style={{
-                background: "conic-gradient(from 0deg, rgba(142, 100, 255, 0.15) 0deg, transparent 60deg, transparent 360deg)",
-                animation: "radar-sweep 12s linear infinite",
+                background: "conic-gradient(from 0deg, rgba(142, 100, 255, 0.18) 0deg, transparent 60deg, transparent 360deg)",
               }}
             />
 
             {/* Central Hunter Core Node */}
-            <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-brand-purple to-brand-dark p-0.5 shadow-2xl shadow-brand-purple/50 flex items-center justify-center">
+            <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-brand-purple to-brand-dark p-0.5 shadow-2xl shadow-brand-purple/40 flex items-center justify-center">
               <div className="w-full h-full rounded-full bg-[#12082B] flex flex-col items-center justify-center p-3 text-center">
                 <span className="text-xs font-bold uppercase tracking-wider text-white">Hunter</span>
                 <span className="text-[10px] text-brand-accent font-medium mt-0.5">Active Scan</span>

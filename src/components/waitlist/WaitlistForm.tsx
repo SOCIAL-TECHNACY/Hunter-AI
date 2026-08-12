@@ -175,7 +175,7 @@ export function WaitlistForm({ defaultReferralCode, onSuccess }: WaitlistFormPro
               id="referralCode"
               label="Referral Code (optional)"
               placeholder="e.g. ADEY-SALEMAX123"
-              hint="Enter your referrer's code to give them +100 points"
+              hint="Optional: Enter a referral code if you were invited by another business"
               variant="light"
               error={errors.referralCode?.message}
               {...register("referralCode")}

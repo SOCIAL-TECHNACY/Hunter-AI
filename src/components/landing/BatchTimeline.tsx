@@ -108,10 +108,10 @@ export function BatchTimeline() {
             </div>
             <div>
               <p className="text-xs font-bold text-[#1A1033]">
-                Refer 3 businesses to skip the queue
+                Share with fellow business owners
               </p>
               <p className="text-xs text-slate-600">
-                Every confirmed referral earns you 100 points and moves you up the access list.
+                Give your merchant peers early access so they can also claim 7 full days of access at launch.
               </p>
             </div>
           </div>
